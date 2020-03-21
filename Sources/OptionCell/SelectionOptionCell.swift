@@ -35,9 +35,8 @@ class SelectionOptionCell: UITableViewCell, OptionCell {
             .addSubview(self.segmentedControl)
         
         self.name.snp.makeConstraints { constraintMaker in
-            constraintMaker.top.equalToSuperview().inset(3)
-            constraintMaker.leading.equalToSuperview().inset(8)
-            constraintMaker.bottom.equalTo(self.segmentedControl).inset(12)
+            constraintMaker.top.equalToSuperview().inset(8)
+            constraintMaker.leading.equalToSuperview().inset(16)
         }
 
         self.segmentedControl.snp.makeConstraints { constraintMaker in
