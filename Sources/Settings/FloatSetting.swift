@@ -1,6 +1,6 @@
 import Foundation
 
-public class FloatOption: Option {
+public class FloatSetting: Setting {
     public typealias Handler = (Float) -> Void
     public var name: String
     public var min: Float

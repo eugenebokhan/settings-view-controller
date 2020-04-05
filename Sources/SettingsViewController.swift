@@ -1,68 +1,47 @@
 import UIKit
-import SnapKit
+import CustomHeightTransition
 
-public class SettingsViewController: UITableViewController {
-    
-    public var options: [Option] = []
+public final class SettingsViewController: UINavigationController {
 
-    fileprivate var registeredTypes: [ObjectIdentifier: UITableViewCell.Type] = [:]
-
-    fileprivate func register(cellType: UITableViewCell.Type,
-                              for modelType: Option.Type) {
-        let typeId = ObjectIdentifier(modelType)
-        self.registeredTypes[typeId] = cellType
+    public var settings: [Setting] {
+        get { self.settingsTableViewController.settings }
+        set { self.settingsTableViewController.settings = newValue }
+    }
+    public var contentHeight: CGFloat {
+        self.settingsTableViewController.contentHeight
     }
 
-    fileprivate func cellType(for modelType: Option.Type) -> UITableViewCell.Type? {
-        let typeId = ObjectIdentifier(modelType)
-        return self.registeredTypes[typeId]
+    private let settingsTableViewController: SettingsTableViewController
+    private let transitioning: CustomHeightTransitioningDelegate
+
+    public init(settings: [Setting]) {
+        self.settingsTableViewController = .init()
+        self.transitioning = .init()
+        super.init(rootViewController: self.settingsTableViewController)
+        self.settingsTableViewController.delegate = self
+        self.settings = settings
+        self.transitioning.customHeight = self.contentHeight + 166
+        self.transitioning.showCloseButton = true
+        self.transitioning.showIndicator = true
+        self.transitioningDelegate = self.transitioning
+        self.modalPresentationStyle = .custom
+        self.modalPresentationCapturesStatusBarAppearance = true
+
+        self.navigationBar.topItem?.title = "Settings"
+        self.navigationBar.prefersLargeTitles = true
+        self.navigationBar.topItem?.largeTitleDisplayMode = .always
     }
 
-    override public func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.tableView.registerCell(cell: BoolOptionCell.self)
-        self.tableView.registerCell(cell: FloatOptionCell.self)
-        self.tableView.registerCell(cell: SelectionOptionCell.self)
-
-        self.register(cellType: BoolOptionCell.self, for: BoolOption.self)
-        self.register(cellType: FloatOptionCell.self, for: FloatOption.self)
-        self.register(cellType: SelectionOptionCell.self, for: SelectionOption.self)
-
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = 140
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
-    override public func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+}
+
+extension SettingsViewController: SettingsTableViewControllerDelegate {
+    func adjustedContentInsetDidChange(adjustedContentInset: UIEdgeInsets) {
+        let alpha = (adjustedContentInset.top - 70) / 26
+        self.transitioning.closeButton?.alpha = alpha
+        self.transitioning.indicator?.alpha = alpha
     }
-
-    override public func tableView(_ tableView: UITableView,
-                            titleForHeaderInSection section: Int) -> String? {
-        return "Options"
-    }
-
-    override public func tableView(_ tableView: UITableView,
-                            numberOfRowsInSection section: Int) -> Int {
-        return self.options.count
-    }
-
-    override public func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let currentOption = self.options[indexPath.row]
-
-        guard let cellType = self.cellType(for: type(of: currentOption)),
-              let cell = self.tableView.dequeueCell(cell: cellType)
-        else { return UITableViewCell() }
-
-        (cell as? OptionCell)?.configure(for: currentOption)
-
-        return cell
-    }
-
-    override public func tableView(_ tableView: UITableView,
-                                   heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
-
 }

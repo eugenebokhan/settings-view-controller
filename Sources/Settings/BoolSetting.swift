@@ -1,6 +1,6 @@
 import Foundation
 
-public class BoolOption: Option {
+public class BoolSetting: Setting {
     public typealias Handler = (Bool) -> Void
 
     public var name: String

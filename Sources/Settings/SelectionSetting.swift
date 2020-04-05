@@ -1,6 +1,6 @@
 import Foundation
 
-public class SelectionOption: Option {
+public class SelectionSetting: Setting {
     public typealias Handler = (Int) -> Void
     public var name: String
     public var segments: [String]
