@@ -40,6 +40,10 @@ let settingsViewController = SettingsViewController(settings: [
 
 ```
 
+# References
+
+The project is based and based on [DebugMenu](https://github.com/s1ddok/DebugMenu)'s [options](https://github.com/s1ddok/DebugMenu/tree/master/Framework/DebugMenu/Options) implementation.
+
 ## License
 
 [MIT](LICENSE)
