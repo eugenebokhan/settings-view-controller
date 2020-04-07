@@ -2,16 +2,13 @@ import Foundation
 
 public class SelectionSetting: Setting {
     public typealias Handler = (Int) -> Void
-    public var name: String
-    public var segments: [String]
 
+    public let name: String
+    public let segments: [String]
     public internal(set) var value: Int {
-        didSet {
-            self.onChangeHandler?(self.value)
-        }
+        didSet { self.onChangeHandler(self.value) }
     }
-
-    public var onChangeHandler: Handler?
+    public let onChangeHandler: Handler
 
     public init(name: String,
                 initialValue: Int,

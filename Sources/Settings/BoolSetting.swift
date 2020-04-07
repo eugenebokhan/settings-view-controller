@@ -3,13 +3,11 @@ import Foundation
 public class BoolSetting: Setting {
     public typealias Handler = (Bool) -> Void
 
-    public var name: String
+    public let name: String
     public internal(set) var value: Bool {
-        didSet {
-            self.onChangeHandler?(self.value)
-        }
+        didSet { self.onChangeHandler(self.value) }
     }
-    public var onChangeHandler: Handler?
+    public let onChangeHandler: Handler
 
     public init(name: String,
                 initialValue: Bool,

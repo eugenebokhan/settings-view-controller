@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "SettingsViewController"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.summary = "Add settings to your app with a few lines of code."
   s.homepage = "https://github.com/eugenebokhan/SettingsViewController"

@@ -7,6 +7,7 @@ class FloatSettingCell: UITableViewCell, SettingCell {
     let name = UILabel()
     let slider = UISlider()
     let valueLabel = UILabel()
+    var format = "%.3f"
 
     var option: FloatSetting?
 
@@ -59,7 +60,9 @@ class FloatSettingCell: UITableViewCell, SettingCell {
 
     @objc
     private func valueChanged(_ sender: UISlider) {
-        self.valueLabel.text = "\(slider.value)"
+
+        self.valueLabel.text = .init(format: format,
+                                     self.slider.value)
         self.option?.value = sender.value
     }
 
@@ -67,11 +70,13 @@ class FloatSettingCell: UITableViewCell, SettingCell {
         guard let floatOption = option as? FloatSetting
         else { return }
 
+        self.format = floatOption.format
         self.slider.minimumValue = floatOption.min
         self.slider.maximumValue = floatOption.max
         self.slider.value = floatOption.value
 
-        self.valueLabel.text = "\(floatOption.value)"
+        self.valueLabel.text = .init(format: format,
+                                     floatOption.value)
         self.name.text = option.name
 
         self.option = floatOption
