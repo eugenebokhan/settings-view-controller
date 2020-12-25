@@ -1,17 +1,12 @@
 import UIKit
 import SnapKit
 
-protocol SettingsTableViewControllerDelegate: AnyObject {
-    func adjustedContentInsetDidChange(adjustedContentInset: UIEdgeInsets)
-}
-
 public class SettingsTableViewController: UITableViewController {
     
     public var settings: [Setting] = []
     public var contentHeight: CGFloat {
         self.settings.compactMap { Self.cellType(for: type(of: $0))?.cellHeight }.reduce(0, +)
     }
-    weak var delegate: SettingsTableViewControllerDelegate? = nil
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +28,7 @@ public class SettingsTableViewController: UITableViewController {
     }
 
     override public func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let currentOption = self.settings[indexPath.row]
 
         guard let cellType = Self.cellType(for: type(of: currentOption)) as? UITableViewCell.Type,
@@ -48,10 +43,6 @@ public class SettingsTableViewController: UITableViewController {
     override public func tableView(_ tableView: UITableView,
                                    heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Self.cellType(for: type(of: self.settings[indexPath.row]))?.cellHeight ?? 30
-    }
-
-    override public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.delegate?.adjustedContentInsetDidChange(adjustedContentInset: scrollView.adjustedContentInset)
     }
 
     private static var registeredTypes: [ObjectIdentifier: SettingCell.Type] = [
