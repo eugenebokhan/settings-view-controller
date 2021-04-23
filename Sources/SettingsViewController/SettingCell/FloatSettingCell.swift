@@ -27,6 +27,10 @@ class FloatSettingCell: UITableViewCell, SettingCell {
         self.slider.addTarget(self,
                               action: #selector(self.valueChanged(_:)),
                               for: .valueChanged)
+        let tap = UITapGestureRecognizer(target: self,
+                                         action: #selector(self.doubleTapped))
+        tap.numberOfTapsRequired = 2
+        self.slider.addGestureRecognizer(tap)
         self.setupLayout()
     }
 
@@ -60,10 +64,16 @@ class FloatSettingCell: UITableViewCell, SettingCell {
 
     @objc
     private func valueChanged(_ sender: UISlider) {
-
         self.valueLabel.text = .init(format: format,
                                      self.slider.value)
         self.option?.value = sender.value
+    }
+
+    @objc
+    func doubleTapped() {
+        self.slider.setValue(self.option?.defaultValue ?? .zero,
+                             animated: true)
+        self.valueChanged(self.slider)
     }
 
     func configure(for option: Setting) {

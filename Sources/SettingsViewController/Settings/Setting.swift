@@ -11,7 +11,7 @@ public extension FloatSetting {
                          min: Float,
                          max: Float) -> FloatSetting {
         let setting = FloatSetting(name: name,
-                                   initialValue: object[keyPath: keyPath],
+                                   defaultValue: object[keyPath: keyPath],
                                    min: min,
                                    max: max) {
             object[keyPath: keyPath] = $0
