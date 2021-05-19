@@ -64,15 +64,18 @@ class FloatSettingCell: UITableViewCell, SettingCell {
 
     @objc
     private func valueChanged(_ sender: UISlider) {
-        self.valueLabel.text = .init(format: format,
-                                     self.slider.value)
-        self.option?.value = sender.value
+        DispatchQueue.main.async {
+            self.valueLabel.text = .init(format: self.format,
+                                         self.slider.value)
+            self.option?.value = sender.value
+        }
     }
 
     @objc
     func doubleTapped() {
         self.slider.setValue(self.option?.defaultValue ?? .zero,
                              animated: true)
+
         self.valueChanged(self.slider)
     }
 
