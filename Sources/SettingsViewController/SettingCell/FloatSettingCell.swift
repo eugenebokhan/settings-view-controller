@@ -76,6 +76,7 @@ class FloatSettingCell: UITableViewCell, SettingCell {
     func doubleTapped() {
         self.slider.setValue(self.setting?.defaultValue ?? .zero,
                              animated: true)
+
         self.valueChanged(self.slider)
     }
 
