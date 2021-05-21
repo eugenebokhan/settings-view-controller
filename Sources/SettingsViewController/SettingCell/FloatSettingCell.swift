@@ -7,9 +7,10 @@ class FloatSettingCell: UITableViewCell, SettingCell {
     let name = UILabel()
     let slider = UISlider()
     let valueLabel = UILabel()
+    
     var format = "%.3f"
-
-    var option: FloatSetting?
+    
+    var setting: FloatSetting?
 
     override init(style: UITableViewCell.CellStyle,
                   reuseIdentifier: String?) {
@@ -39,7 +40,7 @@ class FloatSettingCell: UITableViewCell, SettingCell {
         self.containerView.backgroundColor = .tertiarySystemFill
         self.containerView.layer.cornerRadius = 10
         self.containerView.layer.masksToBounds = true
-
+        
         self.containerView.addSubview(self.name)
         self.containerView.addSubview(self.slider)
         self.containerView.addSubview(self.valueLabel)
@@ -64,32 +65,35 @@ class FloatSettingCell: UITableViewCell, SettingCell {
 
     @objc
     private func valueChanged(_ sender: UISlider) {
-        self.valueLabel.text = .init(format: format,
-                                     self.slider.value)
-        self.option?.value = sender.value
+        DispatchQueue.main.async {
+            self.valueLabel.text = .init(format: self.format,
+                                         sender.value)
+            self.setting?.value = sender.value
+        }
     }
 
     @objc
     func doubleTapped() {
-        self.slider.setValue(self.option?.defaultValue ?? .zero,
+        self.slider.setValue(self.setting?.defaultValue ?? .zero,
                              animated: true)
         self.valueChanged(self.slider)
     }
 
-    func configure(for option: Setting) {
-        guard let floatOption = option as? FloatSetting
+    func configure(for setting: Setting) {
+        guard let floatSetting = setting as? FloatSetting
         else { return }
+        
+        self.setting = floatSetting
 
-        self.format = floatOption.format
-        self.slider.minimumValue = floatOption.min
-        self.slider.maximumValue = floatOption.max
-        self.slider.value = floatOption.value
+        self.slider.minimumValue = floatSetting.min
+        self.slider.maximumValue = floatSetting.max
+        self.slider.value = floatSetting.value
 
-        self.valueLabel.text = .init(format: format,
-                                     floatOption.value)
-        self.name.text = option.name
+        self.valueLabel.text = .init(format: floatSetting.format,
+                                     floatSetting.value)
+        self.name.text = setting.name
 
-        self.option = floatOption
+        self.format = floatSetting.format
     }
 
     static let cellHeight: CGFloat = 114
