@@ -25,13 +25,13 @@ let settingsViewController = SettingsViewController(settings: [
                         self.setScaleType(scaleType)
     },
     FloatSetting(name: "Brightness",
-                 initialValue: 0,
+                 defaultValue: 0,
                  min: -1,
                  max: 1) { brightness in
                     self.setBrightness(brightness)
     },
     FloatSetting(name: "Saturation",
-                 initialValue: 0,
+                 defaultValue: 0,
                  min: -1,
                  max: 1) { saturation in
                     self.setSaturation(saturation)
